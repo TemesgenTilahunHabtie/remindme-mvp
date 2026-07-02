@@ -11,7 +11,7 @@ User's Intent: ${intent}
 Provide a summary, categorize it, find the deeper psychological intent cluster, suggest an action, and assign a priority score.
 `;
 
-    // Google API requires uppercase strings for types inside the schema structure
+    // Enforce pure uppercase types required by the Gemini schema configuration
     const responseSchema = {
       type: "OBJECT",
       properties: {
@@ -24,9 +24,9 @@ Provide a summary, categorize it, find the deeper psychological intent cluster, 
       required: ["ai_summary", "ai_category", "intent_cluster", "suggested_action", "priority_score"]
     };
 
-    // Using the exact standard model string recognized by the endpoint routing engine
+    // FIX: Using 'gemini-flash-latest' to leverage the active, non-deprecated engine
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" +
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=" +
       process.env.REMINDE_ME_GEMINI_API_KEY,
       {
         method: "POST",
@@ -57,7 +57,6 @@ Provide a summary, categorize it, find the deeper psychological intent cluster, 
 
     const aiResult = JSON.parse(text);
 
-    // Direct structural object normalization
     const cleanOutput = {
       ai_summary: aiResult.ai_summary || "No summary generated.",
       ai_category: aiResult.ai_category || "Other",
