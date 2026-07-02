@@ -26,8 +26,8 @@ Analyze the URL and user intent to fill out the requested fields.
       required: ["ai_summary", "ai_category", "intent_cluster", "suggested_action", "priority_score"]
     };
 
-    const response = await fetch(
-      "[https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=](https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=)" +
+   const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" +
       process.env.REMINDE_ME_GEMINI_API_KEY,
       {
         method: "POST",
