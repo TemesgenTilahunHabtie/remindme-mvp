@@ -21,57 +21,29 @@
 <main class="max-w-xl mx-auto p-4"></main>
 
 <script>
+
 let sb;
-let currentUser = null;
+let currentUser = {
+  id: "local-user",
+  email: "demo@remindme.app"
+};
 
 const SUPABASE_URL = "https://iqgqnjfsjpjsrxcjornm.supabase.co";
 const SUPABASE_KEY = "YOUR_SUPABASE_KEY";
 
 function init() {
   sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-  sb.auth.getSession().then(({ data }) => {
-    currentUser = data.session?.user || null;
-    render();
-  });
-
-  sb.auth.onAuthStateChange((_event, session) => {
-    currentUser = session?.user || null;
-    render();
-  });
+  render();
 }
 
 function render() {
   const main = document.querySelector("main");
 
-  if (!currentUser) {
-    main.innerHTML = `
-      <!-- LOGIN SECTION -->
-      <div class="bg-white p-4 rounded shadow space-y-3">
-
-        <input id="email" class="w-full border p-2 rounded" placeholder="Email"/>
-        <input id="password" type="password" class="w-full border p-2 rounded" placeholder="Password"/>
-
-        <button onclick="signUp()" class="w-full bg-gray-700 text-white p-2 rounded">
-          Sign Up
-        </button>
-
-        <button onclick="signIn()" class="w-full bg-black text-white p-2 rounded">
-          Sign In
-        </button>
-
-      </div>
-    `;
-    return;
-  }
-
   main.innerHTML = `
-    <!-- MAIN APP -->
     <div class="space-y-3">
 
-      <div class="flex justify-between text-sm">
-        <span>${currentUser.email}</span>
-        <button onclick="logout()" class="text-red-500">Logout</button>
+      <div class="text-sm text-gray-600">
+        Logged in as: ${currentUser.email}
       </div>
 
       <input id="url" class="w-full border p-2 rounded" placeholder="TikTok URL"/>
@@ -89,99 +61,40 @@ function render() {
         Save
       </button>
 
-      <!-- AI ACTION BUTTON (PATCH AREA) -->
-      <!-- AI_BUTTON_START -->
-<!-- AI_BUTTON_START -->
-
-<button
-  onclick="analyze()"
-  class="w-full bg-blue-600 text-white p-2 rounded">
-  Analyze with AI
-</button>
-
-<!-- AI_BUTTON_END -->
-      <!-- AI_BUTTON_END -->
+      <button onclick="analyze()" class="w-full bg-blue-600 text-white p-2 rounded">
+        Analyze with AI
+      </button>
 
       <h2 class="font-bold mt-6">My Saved Content</h2>
       <div id="list" class="space-y-3"></div>
 
     </div>
   `;
-}
-
-async function signUp() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  const { data, error } = await sb.auth.signUp({
-    email,
-    password
-  });
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  // IMPORTANT: try auto-login immediately
-  const { data: loginData, error: loginError } =
-    await sb.auth.signInWithPassword({
-      email,
-      password
-    });
-
-  if (loginError) {
-    alert("Signup success but login failed: " + loginError.message);
-    return;
-  }
-
-  alert("Account created and logged in!");
-  currentUser = loginData.user;
-  render();
-}
-
-async function signIn() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  const { error } = await sb.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  if (error) alert(error.message);
-}
-
-async function logout() {
-  await sb.auth.signOut();
-}
-
-async function saveItem() {
-  const url = document.getElementById("url").value;
-  const intent = document.getElementById("intent").value;
-  const tag = document.getElementById("tag").value;
-
-  await sb.from("saved_content").insert([{
-    url,
-    intent,
-    tag,
-    user_id: currentUser.id
-  }]);
 
   loadItems();
 }
 
-async function loadItems() {
-  const { data } = await sb
-    .from("saved_content")
-    .select("*")
-    .eq("user_id", currentUser.id)
-    .order("id", { ascending: false });
+function saveItem() {
+  const url = document.getElementById("url").value;
+  const intent = document.getElementById("intent").value;
+  const tag = document.getElementById("tag").value;
 
+  const items = JSON.parse(localStorage.getItem("items") || "[]");
+
+  items.push({ url, intent, tag });
+
+  localStorage.setItem("items", JSON.stringify(items));
+
+  loadItems();
+}
+
+function loadItems() {
   const list = document.getElementById("list");
+  const items = JSON.parse(localStorage.getItem("items") || "[]");
+
   list.innerHTML = "";
 
-  (data || []).forEach(item => {
+  items.slice().reverse().forEach(item => {
     const div = document.createElement("div");
     div.className = "bg-white p-3 rounded shadow";
 
@@ -196,57 +109,38 @@ async function loadItems() {
     list.appendChild(div);
   });
 }
+
 async function analyze() {
+  const url = document.getElementById("url").value;
+  const intent = document.getElementById("intent").value;
 
-  const url =
-    document.getElementById("url").value;
-
-  const intent =
-    document.getElementById("intent").value;
-
-  const response = await fetch(
-    "/.netlify/functions/analyze",
-    {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify({
-        url,
-        intent
-      })
-    }
-  );
+  const response = await fetch("/.netlify/functions/analyze", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url, intent })
+  });
 
   const data = await response.json();
 
   alert(
-`AI Summary:
-${data.ai_summary}
-
-Category:
-${data.ai_category}
-
-Intent Cluster:
-${data.intent_cluster}
-
-Suggested Action:
-${data.suggested_action}
-
-Priority:
-${data.priority_score}`
+    "AI Summary:\n\n" +
+    data.ai_summary +
+    "\n\nCategory: " +
+    data.ai_category +
+    "\n\nCluster: " +
+    data.intent_cluster +
+    "\n\nAction: " +
+    data.suggested_action +
+    "\n\nPriority: " +
+    data.priority_score
   );
 }
 
 window.analyze = analyze;
-window.signUp = signUp;
-window.signIn = signIn;
-window.logout = logout;
 window.saveItem = saveItem;
 
 window.addEventListener("load", init);
+
 </script>
 
 </body>
