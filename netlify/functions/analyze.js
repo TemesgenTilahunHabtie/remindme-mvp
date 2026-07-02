@@ -1,67 +1,83 @@
 export async function handler(event) {
+  try {
+    const { url, intent } = JSON.parse(event.body);
 
-  const { url, intent } = JSON.parse(event.body);
-
-  const prompt = `
-You are an AI assistant for a TikTok "Intent Bookmarking" app.
-
-User saved a TikTok video.
-
+    const prompt = `
+You are an AI assistant for a TikTok intent bookmarking app.
 URL: ${url}
 User intent: ${intent}
 
-Do 4 things:
-
-1. Write a short 1–2 sentence summary of what this video is likely about.
-2. Categorize it into ONE of: Cooking, Learning, Shopping, Entertainment, Finance, Fitness, Business, Other.
-3. Detect the deeper "intent cluster" (examples: self-improvement, money-making, lifestyle upgrade, curiosity, productivity, entertainment addiction).
-4. Suggest ONE actionable next step the user should take.
-
-Return ONLY valid JSON in this format:
-{
-  "ai_summary": "",
-  "ai_category": "",
-  "intent_cluster": "",
-  "suggested_action": "",
-  "priority_score": 1-10
-}
+Analyze the URL and user intent to fill out the requested fields.
 `;
 
-  const response = await fetch(
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" +
+    // The structural blueprint for Gemini's output
+    const responseSchema = {
+      type: "OBJECT",
+      properties: {
+        ai_summary: { type: "STRING", description: "A short, concise summary of the bookmark and intent." },
+        ai_category: { 
+          type: "STRING", 
+          enum: ["Cooking", "Learning", "Shopping", "Entertainment", "Finance", "Fitness", "Business", "Other"] 
+        },
+        intent_cluster: { type: "STRING", description: "The underlying drive (e.g., Skill Acquisition, Passive Income, Meal Prep)." },
+        suggested_action: { type: "STRING", description: "One clear, actionable next step for the user." },
+        priority_score: { type: "INTEGER", description: "A scale from 1 to 10 on urgency/importance based on user intent." }
+      },
+      required: ["ai_summary", "ai_category", "intent_cluster", "suggested_action", "priority_score"]
+    };
+
+    const response = await fetch(
+      "[https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=](https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=)" +
       process.env.REMINDE_ME_GEMINI_API_KEY,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [{ text: prompt }]
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: responseSchema
           }
-        ]
-      })
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    // Check if Google returned an API error
+    if (data.error) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: data.error.message })
+      };
     }
-  );
 
-  const data = await response.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    
+    if (!text) {
+      throw new Error("Empty response from Gemini API structure.");
+    }
 
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
+    const parsed = JSON.parse(text);
 
-  let parsed;
-  try {
-    parsed = JSON.parse(text);
-  } catch (e) {
-    parsed = {
-      ai_summary: text,
-      ai_category: "Other",
-      intent_cluster: "Unknown",
-      suggested_action: "Review manually",
-      priority_score: 5
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(parsed)
+    };
+
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        ai_summary: "Failed to compile AI insight.",
+        ai_category: "Other",
+        intent_cluster: "Unknown",
+        suggested_action: "Review manually. Error: " + error.message,
+        priority_score: 1
+      })
     };
   }
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(parsed)
-  };
 }
