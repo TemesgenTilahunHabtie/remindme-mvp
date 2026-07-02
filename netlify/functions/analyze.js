@@ -11,7 +11,6 @@ User's Intent: ${intent}
 Provide a summary, categorize it, find the deeper psychological intent cluster, suggest an action, and assign a priority score.
 `;
 
-    // Standardized lowercase types to maximize cross-version stability
     const responseSchema = {
       type: "object",
       properties: {
@@ -24,8 +23,9 @@ Provide a summary, categorize it, find the deeper psychological intent cluster, 
       required: ["ai_summary", "ai_category", "intent_cluster", "suggested_action", "priority_score"]
     };
 
+    // FIXED: Changed model to gemini-1.5-flash-latest to align with the v1beta endpoint routing requirements
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" +
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" +
       process.env.REMINDE_ME_GEMINI_API_KEY,
       {
         method: "POST",
@@ -54,10 +54,8 @@ Provide a summary, categorize it, find the deeper psychological intent cluster, 
       throw new Error("Gemini returned an empty content payload.");
     }
 
-    // Safely parse the raw text returned by the model
     const aiResult = JSON.parse(text);
 
-    // Hard-mapping to guarantee the exact keys expected by index.html
     const cleanOutput = {
       ai_summary: aiResult.ai_summary || "No summary generated.",
       ai_category: aiResult.ai_category || "Other",
