@@ -113,9 +113,31 @@ async function signUp() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  await sb.auth.signUp({ email, password });
+  const { data, error } = await sb.auth.signUp({
+    email,
+    password
+  });
 
-  alert("Check your email for confirmation.");
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  // IMPORTANT: try auto-login immediately
+  const { data: loginData, error: loginError } =
+    await sb.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  if (loginError) {
+    alert("Signup success but login failed: " + loginError.message);
+    return;
+  }
+
+  alert("Account created and logged in!");
+  currentUser = loginData.user;
+  render();
 }
 
 async function signIn() {
