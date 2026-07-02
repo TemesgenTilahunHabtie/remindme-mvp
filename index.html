@@ -91,7 +91,15 @@ function render() {
 
       <!-- AI ACTION BUTTON (PATCH AREA) -->
       <!-- AI_BUTTON_START -->
+<!-- AI_BUTTON_START -->
 
+<button
+  onclick="analyze()"
+  class="w-full bg-blue-600 text-white p-2 rounded">
+  Analyze with AI
+</button>
+
+<!-- AI_BUTTON_END -->
       <!-- AI_BUTTON_END -->
 
       <h2 class="font-bold mt-6">My Saved Content</h2>
@@ -166,7 +174,51 @@ async function loadItems() {
     list.appendChild(div);
   });
 }
+async function analyze() {
 
+  const url =
+    document.getElementById("url").value;
+
+  const intent =
+    document.getElementById("intent").value;
+
+  const response = await fetch(
+    "/.netlify/functions/analyze",
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        url,
+        intent
+      })
+    }
+  );
+
+  const data = await response.json();
+
+  alert(
+`AI Summary:
+${data.ai_summary}
+
+Category:
+${data.ai_category}
+
+Intent Cluster:
+${data.intent_cluster}
+
+Suggested Action:
+${data.suggested_action}
+
+Priority:
+${data.priority_score}`
+  );
+}
+
+window.analyze = analyze;
 window.signUp = signUp;
 window.signIn = signIn;
 window.logout = logout;
