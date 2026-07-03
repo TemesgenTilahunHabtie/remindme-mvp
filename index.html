@@ -1,343 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Become — Save inspiration. Become who you want to be.</title>
-
-  <!-- Tailwind UI Layer & Chart Engine -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Become — Intercept Inspiration</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #000000; color: #f5f5f5; }
+    .glass-card { background: rgba(10, 10, 10, 0.7); border: 1px solid rgba(38, 38, 38, 0.4); backdrop-filter: blur(12px); }
+  </style>
 </head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-500/30 selection:text-emerald-400">
 
-<body class="bg-[#FBFBFA] min-h-screen text-neutral-900 font-sans antialiased selection:bg-emerald-100 selection:text-emerald-900">
-
-<!-- System Navigation Minimalist Header -->
-<!-- ================= HEADER SECTION WITH GATEWAY BUTTON ================= -->
-<header class="bg-black text-white p-5 shadow-sm flex justify-between items-center sticky top-0 z-50">
-  <div class="flex items-center gap-2.5">
-    <h1 class="font-black tracking-tight text-2xl text-white">Become<span class="text-emerald-400">.</span></h1>
-    <span class="text-[9px] bg-neutral-900 text-neutral-400 border border-neutral-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-widest">Personal OS v1.0</span>
-  </div>
-  
-  <!-- The Gateway Button Wrapper -->
-  <div class="flex items-center gap-4">
-    <a href="dashboard.html" class="text-xs bg-neutral-900 px-3.5 py-1.5 rounded-full border border-neutral-800 text-neutral-300 font-bold hover:text-emerald-400 hover:border-emerald-500/40 transition shadow-sm">
-      Open Intelligence Mirror 👁️ →
-    </a>
-    <div class="text-xs bg-neutral-900 px-3 py-1.5 rounded-full border border-neutral-800 text-neutral-400 font-medium" id="user-badge">
-      future.self@become.os
-    </div>
-  </div>
-</header>
-<!-- ===================================================================== -->
-
-<main class="max-w-xl mx-auto p-4 space-y-6">
-
-  <!-- ================= IDENTITY PULSE DASHBOARD ================= -->
-  <div class="bg-white p-6 rounded-2xl border border-neutral-200/70 shadow-[0_2px_8px_rgba(0,0,0,0.02)] space-y-4">
-    <div class="flex justify-between items-center">
-      <h2 class="text-base font-bold text-neutral-900 tracking-tight flex items-center gap-2">
-        <span>👁️</span> Self-Understanding Mirror
-      </h2>
-      <span class="text-[11px] text-neutral-400 font-semibold uppercase tracking-wider">Behavioral Blueprint</span>
-    </div>
-
-    <!-- Quick Count Indicators -->
-    <div class="grid grid-cols-3 gap-3">
-      <div class="bg-neutral-50 p-3 rounded-xl border border-neutral-100 text-center">
-        <span class="block text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Sparks Saved</span>
-        <span id="stat-total" class="text-xl font-black text-neutral-900">0</span>
-      </div>
-      <div class="bg-emerald-50/40 p-3 rounded-xl border border-emerald-100/60 text-center">
-        <span class="block text-[10px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">Mapped</span>
-        <span id="stat-analyzed" class="text-xl font-black text-emerald-800">0</span>
-      </div>
-      <div class="bg-amber-50/40 p-3 rounded-xl border border-amber-100/60 text-center">
-        <span class="block text-[10px] font-bold text-amber-700 uppercase tracking-wider mb-0.5">High Urgency</span>
-        <span id="stat-high" class="text-xl font-black text-amber-800">0</span>
-      </div>
-    </div>
-
-    <!-- Chart Canvas Container -->
-    <div class="relative w-full bg-neutral-50 p-2 rounded-xl border border-neutral-100 h-44 flex items-center justify-center">
-      <canvas id="analyticsChart"></canvas>
-      <div id="chart-fallback" class="absolute inset-0 flex flex-col items-center justify-center bg-neutral-50 p-4 text-center text-xs text-neutral-400 font-medium hidden">
-        <span>Capture an inspiration fragment and map your intent to unlock your psychological cluster graph.</span>
-      </div>
-    </div>
-  </div>
-  <!-- ============================================================= -->
-
-  <!-- Inspiration Capture Node -->
-  <div class="bg-white p-6 rounded-2xl border border-neutral-200/70 shadow-[0_2px_8px_rgba(0,0,0,0.02)] space-y-4">
-    <div class="space-y-1">
-      <h2 class="text-lg font-bold text-neutral-900 tracking-tight">Intercept Inspiration</h2>
-      <p class="text-xs text-neutral-500">Do not just collect content. Capture the future version of yourself.</p>
+  <!-- ================= GLOBAL HERO NAVIGATION & GATEWAY ================= -->
+  <header class="bg-black text-white p-5 border-b border-neutral-900 flex justify-between items-center sticky top-0 z-50 backdrop-blur-md bg-black/80">
+    <div class="flex items-center gap-2.5">
+      <h1 class="font-black tracking-tight text-2xl text-white">Become<span class="text-emerald-400">.</span></h1>
+      <span class="text-[9px] bg-neutral-900 text-neutral-400 border border-neutral-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-widest">Personal OS v2.0</span>
     </div>
     
-    <div class="space-y-3">
-      <div>
-        <label class="block text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-1">Inspiration Media Link (TikTok / Reel / Idea)</label>
-        <input
-          id="url"
-          class="w-full bg-neutral-50 border border-neutral-200 p-3 rounded-xl focus:ring-2 focus:ring-black focus:bg-white focus:outline-none text-sm transition"
-          placeholder="Paste URL here..."/>
+    <div class="flex items-center gap-4">
+      <!-- The Gateway Button to the Product Hub -->
+      <a href="dashboard.html" class="text-xs bg-neutral-900 px-3.5 py-1.5 rounded-full border border-neutral-800 text-neutral-300 font-bold hover:text-emerald-400 hover:border-emerald-500/40 transition shadow-sm flex items-center gap-1.5">
+        Open Intelligence Mirror 👁️ →
+      </a>
+      <div class="text-xs bg-neutral-900 px-3 py-1.5 rounded-full border border-neutral-800 text-neutral-400 font-medium" id="user-badge">
+        future.self@become.os
       </div>
-
-      <div>
-        <label class="block text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-1">Who did you see yourself becoming when you watched this?</label>
-        <textarea
-          id="intent"
-          rows="3"
-          class="w-full bg-neutral-50 border border-neutral-200 p-3 rounded-xl focus:ring-2 focus:ring-black focus:bg-white focus:outline-none text-sm transition placeholder:text-neutral-400"
-          placeholder="E.g., 'I saw myself building an automated business' or 'I want to break my pattern of procrastination and master health.'"></textarea>
-      </div>
-
-      <div class="hidden">
-        <select id="tag"><option selected>Aspiration</option></select>
-      </div>
-
-      <button
-        onclick="saveItem()"
-        class="w-full bg-black hover:bg-neutral-800 text-white font-semibold p-3.5 rounded-xl transition text-sm shadow-sm tracking-wide">
-        Commit to Intent Log
-      </button>
     </div>
-  </div>
+  </header>
 
-  <!-- Intent Streams Execution Area -->
-  <div class="space-y-3">
-    <h2 class="font-bold text-base text-neutral-800 tracking-tight px-1">Active Transformation Streams</h2>
-    <div id="list" class="space-y-4"></div>
-  </div>
-</main>
-
-<script>
-let sb;
-let chartInstance = null;
-
-const SUPABASE_URL = "https://iqgqnjfsjpjsrxcjornm.supabase.co";
-const SUPABASE_KEY = "YOUR_SUPABASE_KEY";
-
-function init() {
-  sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  loadItems();
-}
-
-function saveItem() {
-  const url = document.getElementById("url").value;
-  const intent = document.getElementById("intent").value;
-  const tag = document.getElementById("tag").value;
-
-  if (!url || !intent) {
-    alert("Please capture both the link and your internal intent statement.");
-    return;
-  }
-
-  const items = JSON.parse(localStorage.getItem("items") || "[]");
-  
-  items.push({
-    id: Date.now().toString(),
-    url,
-    intent,
-    tag,
-    aiAnalyzed: false,
-    aiData: null
-  });
-
-  localStorage.setItem("items", JSON.stringify(items));
-  
-  document.getElementById("url").value = "";
-  document.getElementById("intent").value = "";
-  
-  loadItems();
-}
-
-function updateAnalyticsDashboard(items) {
-  const totalCount = items.length;
-  const analyzedItems = items.filter(i => i.aiAnalyzed && i.aiData);
-  const highPriorityCount = analyzedItems.filter(i => parseInt(i.aiData.priority_score || 0) >= 7).length;
-
-  document.getElementById("stat-total").innerText = totalCount;
-  document.getElementById("stat-analyzed").innerText = analyzedItems.length;
-  document.getElementById("stat-high").innerText = highPriorityCount;
-
-  const canvas = document.getElementById("analyticsChart");
-  const fallback = document.getElementById("chart-fallback");
-
-  if (analyzedItems.length === 0) {
-    canvas.classList.add("hidden");
-    fallback.classList.remove("hidden");
-    return;
-  }
-
-  canvas.classList.remove("hidden");
-  fallback.classList.add("hidden");
-
-  const clusterCounts = {};
-  analyzedItems.forEach(item => {
-    const cluster = item.aiData.intent_cluster || "Identity Spark";
-    clusterCounts[cluster] = (clusterCounts[cluster] || 0) + 1;
-  });
-
-  const labels = Object.keys(clusterCounts);
-  const chartData = Object.values(clusterCounts);
-
-  if (chartInstance) {
-    chartInstance.destroy();
-  }
-
-  const ctx = canvas.getContext("2d");
-  chartInstance = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: labels,
-      datasets: [{
-        label: "Desire Vectors",
-        data: chartData,
-        backgroundColor: "#10B981", 
-        borderRadius: 6,
-        borderSkipped: false
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false }
-      },
-      scales: {
-        x: {
-          grid: { display: false },
-          ticks: { font: { size: 10, weight: '700' }, color: '#737373' }
-        },
-        y: {
-          grid: { color: '#F5F5F4' },
-          ticks: { precision: 0, font: { size: 10 }, color: '#A3A3A3' },
-          beginAtZero: true
-        }
-      }
-    }
-  });
-}
-
-function loadItems() {
-  const list = document.getElementById("list");
-  const items = JSON.parse(localStorage.getItem("items") || "[]");
-
-  updateAnalyticsDashboard(items);
-
-  if (items.length === 0) {
-    list.innerHTML = `
-      <div class="text-center py-12 text-neutral-400 text-xs border border-dashed border-neutral-200 rounded-2xl bg-white p-6">
-        Your intent stream is clear. Intercept inspiration above to witness your behavioral patterns assemble.
-      </div>`;
-    return;
-  }
-
-  list.innerHTML = "";
-
-  items.slice().reverse().forEach(item => {
-    const div = document.createElement("div");
-    div.className = "bg-white p-5 rounded-2xl border border-neutral-200/70 shadow-[0_2px_6px_rgba(0,0,0,0.01)] space-y-4";
-
-    let metaTag = item.aiAnalyzed && item.aiData ? item.aiData.ai_category : "Processing Intent";
-    let priorityBadge = '';
+  <!-- ================= CORE INTERCEPT WORKSPACE ================= -->
+  <main class="flex-1 p-6 md:p-12 max-w-4xl w-full mx-auto flex flex-col justify-center space-y-8">
     
-    if (item.aiAnalyzed && item.aiData) {
-      priorityBadge = `<span class="bg-amber-50 text-amber-800 border border-amber-200/60 text-[10px] px-2.5 py-0.5 rounded-full font-bold">Priority Vector: ${item.aiData.priority_score}/10</span>`;
-    }
+    <!-- Strategic Branding Identity Block -->
+    <div class="text-center md:text-left space-y-2">
+      <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white">Save inspiration.<br><span class="text-emerald-400">Become who you want to be.</span></h2>
+      <p class="text-sm text-neutral-500 max-w-xl">Intercept points of curiosity before they dissolve into mindless consumption loops. Translate input into active identity structures.</p>
+    </div>
 
-    let aiSection = "";
-    if (item.aiAnalyzed && item.aiData) {
-      aiSection = `
-        <div class="mt-3 pt-3 border-t border-neutral-100 space-y-3.5">
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded uppercase tracking-wider">AI Translation</span>
-              <p class="text-xs text-neutral-600 mt-1 leading-relaxed">${item.aiData.ai_summary}</p>
-            </div>
-            <div>
-              <span class="text-[9px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded uppercase tracking-wider">Intent Profile</span>
-              <p class="text-xs text-neutral-600 mt-1 leading-relaxed">${item.aiData.intent_cluster}</p>
-            </div>
-          </div>
-          <div class="bg-neutral-900 text-neutral-100 p-4 rounded-xl border border-neutral-950 shadow-inner">
-            <span class="text-[9px] font-black text-emerald-400 uppercase tracking-widest block">⚡ Strategic Action Point:</span>
-            <p class="text-sm font-medium mt-1 text-white leading-relaxed">${item.aiData.suggested_action}</p>
-          </div>
+    <!-- ================= PSYCHOLOGICAL INITIALIZATION TRACKING PANEL ================= -->
+    <!-- Replaces old numeric counters with active transformational vectors -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-neutral-950 border border-neutral-900 p-4 rounded-xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-12 h-12 bg-emerald-500/5 rounded-full blur-xl"></div>
+        <span class="text-[9px] uppercase font-bold tracking-widest text-neutral-500 block">Calculated Trajectory</span>
+        <p class="text-base font-bold text-white mt-1">Primary: Entrepreneur</p>
+        <p class="text-[10px] text-emerald-400 mt-0.5">Emerging Framework: AI Creator</p>
+      </div>
+      
+      <div class="bg-neutral-950 border border-neutral-900 p-4 rounded-xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-12 h-12 bg-red-500/5 rounded-full blur-xl"></div>
+        <span class="text-[9px] uppercase font-bold tracking-widest text-neutral-400 block">Systemic Friction Node</span>
+        <p class="text-base font-bold text-red-400 mt-1">Perfectionism Loop</p>
+        <p class="text-[10px] text-neutral-500 mt-0.5">Learning preferred over execution</p>
+      </div>
+
+      <div class="bg-neutral-950 border border-neutral-900 p-4 rounded-xl flex justify-between items-center relative overflow-hidden">
+        <div>
+          <span class="text-[9px] uppercase font-bold tracking-widest text-neutral-500 block">Today's Reality Action</span>
+          <p class="text-xs font-bold text-neutral-200 mt-1 truncate max-w-[160px]">Deploy 1 Landing Page</p>
+          <p class="text-[10px] text-neutral-500 mt-0.5">Est. time: 20 mins</p>
         </div>
-      `;
-    } else {
-      aiSection = `
-        <button
-          onclick="analyzeItem('${item.id}')"
-          class="mt-2 w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs py-2.5 px-4 rounded-xl transition tracking-wide uppercase">
-          ✨ Extract Future Self Blueprint
+        <a href="dashboard.html" class="text-[10px] bg-neutral-900 border border-neutral-800 text-neutral-300 font-bold px-2.5 py-2 rounded-lg hover:text-emerald-400 hover:border-emerald-500/30 transition shadow-md whitespace-nowrap z-10">
+          View Map →
+        </a>
+      </div>
+    </div>
+
+    <!-- Transformation Streams Dynamic Intercept Input Node -->
+    <div class="glass-card p-6 md:p-8 rounded-2xl border border-neutral-900 bg-neutral-950/40 space-y-5 shadow-2xl">
+      <div class="space-y-1">
+        <h3 class="text-xs uppercase font-extrabold tracking-widest text-emerald-400">Intercept Inspiration</h3>
+        <p class="text-xs text-neutral-500">Inject raw content stream references (Videos, Blueprints, Articles, Text snippets) here.</p>
+      </div>
+
+      <form id="intercept-form" class="space-y-4" onsubmit="event.preventDefault();">
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">Source Reference Link / Thought</label>
+          <input type="text" placeholder="https://... or paste critical technical insight snippet..." class="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white transition placeholder:text-neutral-700">
+        </div>
+
+        <!-- High Emotional Friction Interaction Node -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">Who did you see yourself becoming when you watched/read this?</label>
+          <textarea rows="3" placeholder="Describe the version of you that executes this framework. Disrupt passive consumption patterns immediately..." class="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white transition placeholder:text-neutral-700 resize-none"></textarea>
+        </div>
+
+        <button type="submit" class="w-full bg-white text-black py-3 rounded-xl font-bold text-xs hover:bg-neutral-200 transition tracking-wide shadow-md uppercase">
+          Commit To Transformation Stream
         </button>
-      `;
-    }
+      </form>
+    </div>
 
-    div.innerHTML = `
-      <div class="flex justify-between items-center text-xs">
-        <span class="bg-neutral-100 text-neutral-700 px-2.5 py-1 rounded-md font-bold text-[10px] uppercase tracking-wider">${metaTag}</span>
-        ${priorityBadge}
-      </div>
+  </main>
 
-      <div>
-        <div class="flex items-center gap-1.5">
-          <span class="text-xs text-neutral-400 font-semibold">Source Material:</span>
-          <a href="${item.url}" target="_blank" class="text-xs font-bold text-emerald-600 hover:underline inline-flex items-center gap-0.5">
-            Open Web Media
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-          </a>
-        </div>
-        <p class="text-neutral-800 text-base mt-2 font-semibold tracking-tight leading-snug">"${item.intent}"</p>
-      </div>
+  <footer class="border-t border-neutral-900 p-6 text-center text-[10px] text-neutral-600 font-mono mt-auto">
+    Become Systems OS © 2026 // Realization Over Information.
+  </footer>
 
-      ${aiSection}
-    `;
-
-    list.appendChild(div);
-  });
-}
-
-async function analyzeItem(itemId) {
-  const items = JSON.parse(localStorage.getItem("items") || "[]");
-  const targetItem = items.find(item => item.id === itemId);
-
-  if (!targetItem) return;
-
-  try {
-    const response = await fetch("/.netlify/functions/analyze", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: targetItem.url, intent: targetItem.intent })
-    });
-
-    const aiData = await response.json();
-
-    targetItem.aiAnalyzed = true;
-    targetItem.aiData = aiData;
-
-    localStorage.setItem("items", JSON.stringify(items));
-    loadItems();
-
-  } catch (error) {
-    alert("The behavioral mapping pipeline timed out. Please retry.");
-  }
-}
-
-window.init = init;
-window.saveItem = saveItem;
-window.analyzeItem = analyzeItem;
-
-window.addEventListener("load", init);
-</script>
 </body>
 </html>
