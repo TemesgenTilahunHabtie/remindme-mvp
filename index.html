@@ -9,88 +9,110 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #000000; color: #f5f5f5; }
-    .glass-card { background: rgba(10, 10, 10, 0.7); border: 1px solid rgba(38, 38, 38, 0.4); backdrop-filter: blur(12px); }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #050505; color: #f5f5f5; }
+    .glass-card { background: rgba(10, 10, 10, 0.75); border: 1px solid rgba(63, 63, 70, 0.3); backdrop-filter: blur(16px); }
+    .neon-glow:hover { box-shadow: 0 0 20px rgba(52, 211, 153, 0.2); }
+    /* Smooth transitions for interactive elements */
+    .transition-all-300 { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-500/30 selection:text-emerald-400">
+<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-500/30 selection:text-emerald-400 overflow-x-hidden">
 
-  <!-- ================= GLOBAL HERO NAVIGATION & GATEWAY ================= -->
-  <header class="bg-black text-white p-5 border-b border-neutral-900 flex justify-between items-center sticky top-0 z-50 backdrop-blur-md bg-black/80">
-    <div class="flex items-center gap-2.5">
+  <!-- ================= TOP HUD & GLOBAL LANGUAGE OVERLAY ================= -->
+  <header class="bg-black/80 text-white p-4 md:p-5 border-b border-zinc-900 flex justify-between items-center sticky top-0 z-50 backdrop-blur-md">
+    <div class="flex items-center gap-3">
       <h1 class="font-black tracking-tight text-2xl text-white">Become<span class="text-emerald-400">.</span></h1>
-      <span class="text-[9px] bg-neutral-900 text-neutral-400 border border-neutral-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-widest">Personal OS v2.0</span>
+      <span class="text-[9px] bg-zinc-900 text-zinc-400 border border-zinc-800 font-bold px-2 py-0.5 rounded-full uppercase tracking-widest hidden sm:inline-block">Global Engine v2.5</span>
     </div>
     
-    <div class="flex items-center gap-4">
-      <!-- The Gateway Button to the Product Hub -->
-      <a href="dashboard.html" class="text-xs bg-neutral-900 px-3.5 py-1.5 rounded-full border border-neutral-800 text-neutral-300 font-bold hover:text-emerald-400 hover:border-emerald-500/40 transition shadow-sm flex items-center gap-1.5">
-        Open Intelligence Mirror 👁️ →
-      </a>
-      <div class="text-xs bg-neutral-900 px-3 py-1.5 rounded-full border border-neutral-800 text-neutral-400 font-medium" id="user-badge">
-        future.self@become.os
+    <div class="flex items-center gap-3 md:gap-6">
+      <!-- DYNAMIC INTERACTIVE LANGUAGE PICKER -->
+      <div class="relative inline-block text-left" id="lang-selector-wrapper">
+        <button onclick="toggleLangDropdown()" class="text-xs bg-zinc-900/90 px-3 py-2 rounded-xl border border-zinc-800 text-zinc-300 font-semibold hover:border-emerald-500/50 transition-all duration-200 flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/40">
+          <span id="current-lang-flag">🇬🇧</span>
+          <span id="current-lang-label">English</span>
+          <svg class="w-3 h-3 text-zinc-500 transition-transform duration-200" id="lang-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+        
+        <!-- Dropdown Menu items -->
+        <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-48 rounded-xl bg-zinc-950 border border-zinc-800 shadow-2xl z-50 overflow-hidden transform opacity-0 scale-95 transition-all duration-200 origin-top-right">
+          <div class="py-1 font-medium text-xs text-zinc-400">
+            <button onclick="changeLanguage('en', '🇬🇧', 'English')" class="w-full text-left px-4 py-2.5 hover:bg-emerald-500/10 hover:text-white transition flex items-center gap-3"><span>🇬🇧</span> English</button>
+            <button onclick="changeLanguage('am', '🇪🇹', 'አማርኛ')" class="w-full text-left px-4 py-2.5 hover:bg-emerald-500/10 hover:text-white transition flex items-center gap-3"><span>🇪🇹</span> አማርኛ</button>
+            <button onclick="changeLanguage('ar', '🇦🇪', 'العربية')" class="w-full text-left px-4 py-2.5 hover:bg-emerald-500/10 hover:text-white transition flex items-center gap-3"><span>🇦🇪</span> العربية</button>
+            <button onclick="changeLanguage('fr', '🇫🇷', 'Français')" class="w-full text-left px-4 py-2.5 hover:bg-emerald-500/10 hover:text-white transition flex items-center gap-3"><span>🇫🇷</span> Français</button>
+          </div>
+        </div>
       </div>
+
+      <!-- Main Gateway System Link -->
+      <a href="dashboard.html" class="text-xs bg-emerald-500 text-black px-4 py-2 rounded-xl font-bold hover:bg-emerald-400 transition-all duration-200 shadow-lg shadow-emerald-500/10 flex items-center gap-1.5 whitespace-nowrap" id="nav-mirror-btn">
+        Open Mirror 👁️ →
+      </a>
     </div>
   </header>
 
-  <!-- ================= CORE INTERCEPT WORKSPACE ================= -->
+  <!-- ================= MAIN APP WORKSPACE ================= -->
   <main class="flex-1 p-6 md:p-12 max-w-4xl w-full mx-auto flex flex-col justify-center space-y-8">
     
-    <!-- Strategic Branding Identity Block -->
-    <div class="text-center md:text-left space-y-2">
-      <h2 class="text-3xl md:text-5xl font-black tracking-tight text-white">Save inspiration.<br><span class="text-emerald-400">Become who you want to be.</span></h2>
-      <p class="text-sm text-neutral-500 max-w-xl">Intercept points of curiosity before they dissolve into mindless consumption loops. Translate input into active identity structures.</p>
+    <!-- Hero Branding Identity Title Area -->
+    <div class="text-center md:text-left space-y-3">
+      <h2 class="text-3xl md:text-6xl font-black tracking-tight text-white leading-tight" id="hero-title">
+        Save inspiration.<br><span class="text-emerald-400">Become who you want to be.</span>
+      </h2>
+      <p class="text-xs md:text-sm text-zinc-500 max-w-xl font-medium" id="hero-subtitle">
+        Intercept points of curiosity before they dissolve into mindless consumption loops. Translate input into active identity structures.
+      </p>
     </div>
 
-    <!-- ================= PSYCHOLOGICAL INITIALIZATION TRACKING PANEL ================= -->
-    <!-- Replaces old numeric counters with active transformational vectors -->
+    <!-- ================= PSYCHOLOGICAL TRACKING MATRIX ================= -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="bg-neutral-950 border border-neutral-900 p-4 rounded-xl relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-12 h-12 bg-emerald-500/5 rounded-full blur-xl"></div>
-        <span class="text-[9px] uppercase font-bold tracking-widest text-neutral-500 block">Calculated Trajectory</span>
-        <p class="text-base font-bold text-white mt-1">Primary: Entrepreneur</p>
-        <p class="text-[10px] text-emerald-400 mt-0.5">Emerging Framework: AI Creator</p>
+      <div class="bg-zinc-950/60 border border-zinc-900/80 p-5 rounded-2xl relative overflow-hidden group hover:border-zinc-700/60 transition-all duration-300">
+        <div class="absolute top-0 right-0 w-16 h-16 bg-emerald-500/5 rounded-full blur-xl group-hover:bg-emerald-500/10 transition-all"></div>
+        <span class="text-[9px] uppercase font-bold tracking-widest text-zinc-500 block" id="lbl-trajectory">Calculated Trajectory</span>
+        <p class="text-base font-bold text-white mt-1.5">Primary: Entrepreneur</p>
+        <p class="text-[10px] text-emerald-400 mt-0.5">Emerging: AI Engineer</p>
       </div>
       
-      <div class="bg-neutral-950 border border-neutral-900 p-4 rounded-xl relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-12 h-12 bg-red-500/5 rounded-full blur-xl"></div>
-        <span class="text-[9px] uppercase font-bold tracking-widest text-neutral-400 block">Systemic Friction Node</span>
-        <p class="text-base font-bold text-red-400 mt-1">Perfectionism Loop</p>
-        <p class="text-[10px] text-neutral-500 mt-0.5">Learning preferred over execution</p>
+      <div class="bg-zinc-950/60 border border-zinc-900/80 p-5 rounded-2xl relative overflow-hidden group hover:border-zinc-700/60 transition-all duration-300">
+        <div class="absolute top-0 right-0 w-16 h-16 bg-red-500/5 rounded-full blur-xl group-hover:bg-red-500/10 transition-all"></div>
+        <span class="text-[9px] uppercase font-bold tracking-widest text-zinc-400 block" id="lbl-friction">Systemic Friction Node</span>
+        <p class="text-base font-bold text-red-400 mt-1.5">Perfectionism Loop</p>
+        <p class="text-[10px] text-zinc-500 mt-0.5">Analysis Paralysis Warning</p>
       </div>
 
-      <div class="bg-neutral-950 border border-neutral-900 p-4 rounded-xl flex justify-between items-center relative overflow-hidden">
-        <div>
-          <span class="text-[9px] uppercase font-bold tracking-widest text-neutral-500 block">Today's Reality Action</span>
-          <p class="text-xs font-bold text-neutral-200 mt-1 truncate max-w-[160px]">Deploy 1 Landing Page</p>
-          <p class="text-[10px] text-neutral-500 mt-0.5">Est. time: 20 mins</p>
+      <div class="bg-zinc-950/60 border border-zinc-900/80 p-5 rounded-2xl flex justify-between items-center relative overflow-hidden group hover:border-zinc-700/60 transition-all duration-300">
+        <div class="absolute top-0 right-0 w-16 h-16 bg-blue-500/5 rounded-full blur-xl"></div>
+        <div class="z-10">
+          <span class="text-[9px] uppercase font-bold tracking-widest text-zinc-500 block" id="lbl-action">Today's Reality Action</span>
+          <p class="text-sm font-bold text-zinc-200 mt-1.5 truncate max-w-[150px]">Deploy Landing Page</p>
+          <p class="text-[10px] text-zinc-500 mt-0.5">Est: 20 mins</p>
         </div>
-        <a href="dashboard.html" class="text-[10px] bg-neutral-900 border border-neutral-800 text-neutral-300 font-bold px-2.5 py-2 rounded-lg hover:text-emerald-400 hover:border-emerald-500/30 transition shadow-md whitespace-nowrap z-10">
+        <a href="dashboard.html" class="text-[10px] bg-zinc-900 border border-zinc-800 text-zinc-300 font-bold px-3 py-2.5 rounded-xl hover:text-emerald-400 hover:border-emerald-500/40 transition-all duration-200 shadow-md whitespace-nowrap z-10" id="btn-map">
           View Map →
         </a>
       </div>
     </div>
 
-    <!-- Transformation Streams Dynamic Intercept Input Node -->
-    <div class="glass-card p-6 md:p-8 rounded-2xl border border-neutral-900 bg-neutral-950/40 space-y-5 shadow-2xl">
-      <div class="space-y-1">
-        <h3 class="text-xs uppercase font-extrabold tracking-widest text-emerald-400">Intercept Inspiration</h3>
-        <p class="text-xs text-neutral-500">Inject raw content stream references (Videos, Blueprints, Articles, Text snippets) here.</p>
+    <!-- ================= DYNAMIC CAPTURE MATRIX CARD ================= -->
+    <div class="glass-card p-6 md:p-8 rounded-3xl space-y-6 shadow-2xl neon-glow transition-all-300">
+      <div class="space-y-1.5">
+        <h3 class="text-xs uppercase font-extrabold tracking-widest text-emerald-400" id="form-header">Intercept Inspiration</h3>
+        <p class="text-xs text-zinc-500" id="form-subheading">Inject raw content stream references (Videos, Blueprints, Articles, Text snippets) here.</p>
       </div>
 
-      <form id="intercept-form" class="space-y-4" onsubmit="event.preventDefault();">
-        <div class="space-y-1">
-          <label class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">Source Reference Link / Thought</label>
-          <input type="text" placeholder="https://... or paste critical technical insight snippet..." class="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white transition placeholder:text-neutral-700">
+      <form id="intercept-form" class="space-y-5" onsubmit="handleFormSubmit(event)">
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block" id="lbl-input-source">Source Reference Link / Thought</label>
+          <input type="text" id="input-source" required placeholder="https://... or paste critical technical insight snippet..." class="w-full bg-zinc-950/90 border border-zinc-800/80 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-emerald-500 text-white transition-all duration-200 placeholder:text-zinc-700">
         </div>
 
-        <!-- High Emotional Friction Interaction Node -->
-        <div class="space-y-1">
-          <label class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">Who did you see yourself becoming when you watched/read this?</label>
-          <textarea rows="3" placeholder="Describe the version of you that executes this framework. Disrupt passive consumption patterns immediately..." class="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 text-white transition placeholder:text-neutral-700 resize-none"></textarea>
+        <div class="space-y-1.5">
+          <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block" id="lbl-input-prompt">Who did you see yourself becoming when you watched/read this?</label>
+          <textarea id="input-reflection" rows="3" required placeholder="Describe the version of you that executes this framework. Disrupt passive consumption patterns..." class="w-full bg-zinc-950/90 border border-zinc-800/80 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-emerald-500 text-white transition-all duration-200 placeholder:text-zinc-700 resize-none"></textarea>
         </div>
 
-        <button type="submit" class="w-full bg-white text-black py-3 rounded-xl font-bold text-xs hover:bg-neutral-200 transition tracking-wide shadow-md uppercase">
+        <button type="submit" class="w-full bg-white text-black py-3.5 rounded-xl font-bold text-xs hover:bg-zinc-200 transition-all duration-200 tracking-wide shadow-md uppercase" id="btn-submit">
           Commit To Transformation Stream
         </button>
       </form>
@@ -98,9 +120,184 @@
 
   </main>
 
-  <footer class="border-t border-neutral-900 p-6 text-center text-[10px] text-neutral-600 font-mono mt-auto">
+  <footer class="border-t border-zinc-900/60 p-6 text-center text-[10px] text-zinc-600 font-mono mt-auto" id="footer-text">
     Become Systems OS © 2026 // Realization Over Information.
   </footer>
 
+  <!-- ================= SYSTEM ENGINE ACTIONS (JAVASCRIPT) ================= -->
+  <script>
+    // Localized Dictionary Store
+    const languages = {
+      en: {
+        heroTitle: 'Save inspiration.<br><span class="text-emerald-400">Become who you want to be.</span>',
+        heroSubtitle: 'Intercept points of curiosity before they dissolve into mindless consumption loops. Translate input into active identity structures.',
+        navMirrorBtn: 'Open Mirror 👁️ →',
+        trajectory: 'Calculated Trajectory',
+        friction: 'Systemic Friction Node',
+        action: "Today's Reality Action",
+        viewMap: 'View Map →',
+        formHeader: 'Intercept Inspiration',
+        formSub: 'Inject raw content stream references (Videos, Blueprints, Articles, Text snippets) here.',
+        inputSrc: 'Source Reference Link / Thought',
+        inputPrompt: 'Who did you see yourself becoming when you watched/read this?',
+        submitBtn: 'Commit To Transformation Stream',
+        footer: 'Become Systems OS © 2026 // Realization Over Information.',
+        placeholderSrc: 'https://... or paste critical technical insight snippet...',
+        placeholderReflect: 'Describe the version of you that executes this framework. Disrupt passive consumption patterns...'
+      },
+      am: {
+        heroTitle: 'ተነሳሽነትን ሰብስብ።<br><span class="text-emerald-400">መሆን የምትፈልገውን ሰው ሁን።</span>',
+        heroSubtitle: 'የማወቅ ጉጉት ነጥቦችን ወደ ከንቱ የፍጆታ ዑደቶች ከመቀየርዎ በፊት ይያዙ። ግብዓቶችን ወደ ንቁ የማንነት መዋቅር ይለውጡ።',
+        navMirrorBtn: 'አንጸባራቂውን ክፈት 👁️ →',
+        trajectory: 'የተሰላ ጉዞ',
+        friction: 'የስርዓት ግጭት መስቀለኛ መንገድ',
+        action: 'የዛሬው እውነተኛ ተግባር',
+        viewMap: 'ካርታውን እይ →',
+        formHeader: 'ተነሳሽነትን ይያዙ',
+        formSub: 'ጥሬ የይዘት ዥረት ማጣቀሻዎችን (ቪዲዮዎች፣ እቅዶች፣ ጽሑፎች) እዚህ ያስገቡ።',
+        inputSrc: 'የምንጭ ማጣቀሻ አገናኝ / ሃሳብ',
+        inputPrompt: 'ይህንን ሲመለከቱ/ሲያነቡ ማን ለመሆን አሰቡ?',
+        submitBtn: 'ወደ ለውጥ ዥረት አስገባ',
+        footer: 'ቢካም ሲስተምስ ኦኤስ © 2026 // መገንዘብ ከመረጃ በላይ ነው።',
+        placeholderSrc: 'https://... ወይም ወሳኝ የቴክኒክ ግንዛቤን እዚህ ይለጥፉ...',
+        placeholderReflect: 'ይህንን ማዕቀፍ የሚተገብረውን የእርስዎን ማንነት ይግለጹ...'
+      },
+      ar: {
+        heroTitle: 'احفظ الإلهام.<br><span class="text-emerald-400">كن الشخص الذي تريد أن تكونه.</span>',
+        heroSubtitle: 'اعترض نقاط الفضول قبل أن تذوب في حلقات الاستهلاك الطائشة. ترجم المدخلات إلى هياكل هوية نشطة.',
+        navMirrorBtn: 'افتح المرآة الذكية 👁️ →',
+        trajectory: 'المسار المحسوب',
+        friction: 'عقدة الاحتكاك المنهجي',
+        action: 'عمل الواقع اليوم',
+        viewMap: 'عرض الخريطة →',
+        formHeader: 'اعتراض الإلهام',
+        formSub: 'أدخل مراجع تدفق المحتوى الخام (فيديوهات، مخططات، مقالات) هنا.',
+        inputSrc: 'رابط مرجع المصدر / فكرة',
+        inputPrompt: 'من رأيت نفسك تصبح عندما شاهدت/قرأت هذا؟',
+        submitBtn: 'الالتزام بمسار التحول',
+        footer: 'نظام بيكم نظام التشغيل © 2026 // الإدراك فوق المعلومات.',
+        placeholderSrc: 'https://... أو الصق مقتطف الرؤية الفنية الهامة...',
+        placeholderReflect: 'صف نسخة منك التي تنفذ هذا الإطار. عطل أنماط الاستهلاك السلبية فوراً...'
+      },
+      fr: {
+        heroTitle: 'Sauvegardez l’inspiration.<br><span class="text-emerald-400">Devenez qui vous voulez être.</span>',
+        heroSubtitle: 'Interceptez les points de curiosité avant qu’ils ne se dissolvent dans des boucles de consommation passives. Traduisez les entrées en structures d’identité actives.',
+        navMirrorBtn: 'Ouvrir le Miroir 👁️ →',
+        trajectory: 'Trajectoire Calculée',
+        friction: 'Nœud de Friction Systémique',
+        action: 'Action Réelle du Jour',
+        viewMap: 'Voir la Carte →',
+        formHeader: 'Intercepter l’Inspiration',
+        formSub: 'Injectez des références de flux de contenu brut (Vidéos, Blueprints, Articles, Extraits) ici.',
+        inputSrc: 'Lien de Référence Source / Pensée',
+        inputPrompt: 'Qui vous voyiez-vous devenir en regardant/lisant ceci ?',
+        submitBtn: 'S’engager Dans le Flux de Transformation',
+        footer: 'Become Systems OS © 2026 // La Réalisation sur l’Information.',
+        placeholderSrc: 'https://... ou collez un extrait d’aperçu technique critique...',
+        placeholderReflect: 'Décrivez la version de vous qui exécute ce cadre. Perturbez immédiatement les schémas de consommation passive...'
+      }
+    };
+
+    // UI Toggle for Dropdown Window
+    function toggleLangDropdown() {
+      const dropdown = document.getElementById('lang-dropdown');
+      const arrow = document.getElementById('lang-arrow');
+      if (dropdown.classList.contains('hidden')) {
+        dropdown.classList.remove('hidden');
+        setTimeout(() => {
+          dropdown.classList.remove('opacity-0', 'scale-95');
+          dropdown.classList.add('opacity-100', 'scale-100');
+          arrow.classList.add('rotate-180');
+        }, 10);
+      } else {
+        closeDropdown();
+      }
+    }
+
+    function closeDropdown() {
+      const dropdown = document.getElementById('lang-dropdown');
+      const arrow = document.getElementById('lang-arrow');
+      dropdown.classList.remove('opacity-100', 'scale-100');
+      dropdown.classList.add('opacity-0', 'scale-95');
+      arrow.classList.remove('rotate-180');
+      setTimeout(() => dropdown.classList.add('hidden'), 200);
+    }
+
+    // Engine Core Language Translation Switcher
+    function changeLanguage(langKey, flag, labelText) {
+      document.getElementById('current-lang-flag').textContent = flag;
+      document.getElementById('current-lang-label').textContent = labelText;
+      
+      const dict = languages[langKey] || languages['en'];
+      
+      // Perform UI text replacements smoothly
+      document.getElementById('hero-title').innerHTML = dict.heroTitle;
+      document.getElementById('hero-subtitle').textContent = dict.heroSubtitle;
+      document.getElementById('nav-mirror-btn').textContent = dict.navMirrorBtn;
+      document.getElementById('lbl-trajectory').textContent = dict.trajectory;
+      document.getElementById('lbl-friction').textContent = dict.friction;
+      document.getElementById('lbl-action').textContent = dict.action;
+      document.getElementById('btn-map').textContent = dict.viewMap;
+      document.getElementById('form-header').textContent = dict.formHeader;
+      document.getElementById('form-subheading').textContent = dict.formSub;
+      document.getElementById('lbl-input-source').textContent = dict.inputSrc;
+      document.getElementById('lbl-input-prompt').textContent = dict.inputPrompt;
+      document.getElementById('btn-submit').textContent = dict.submitBtn;
+      document.getElementById('footer-text').textContent = dict.footer;
+      
+      // Update interactive placeholders
+      document.getElementById('input-source').placeholder = dict.placeholderSrc;
+      document.getElementById('input-reflection').placeholder = dict.placeholderReflect;
+
+      // Handle structural text orientation for Arabic (RTL support)
+      if(langKey === 'ar') {
+        document.body.setAttribute('dir', 'rtl');
+        document.getElementById('lang-dropdown').classList.remove('right-0');
+        document.getElementById('lang-dropdown').classList.add('left-0');
+      } else {
+        document.body.setAttribute('dir', 'ltr');
+        document.getElementById('lang-dropdown').classList.remove('left-0');
+        document.getElementById('lang-dropdown').classList.add('right-0');
+      }
+
+      // Preserve application state in local memory context
+      localStorage.setItem('selectedLanguage', langKey);
+      closeDropdown();
+    }
+
+    // Capture Submit Form Micro-Interaction
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-submit');
+      const baseText = btn.textContent;
+      
+      // Interactive Button Transformation Feedback loop
+      btn.textContent = "✓ Committed Successfully";
+      btn.classList.remove('bg-white', 'text-black');
+      btn.classList.add('bg-emerald-500', 'text-black');
+      
+      setTimeout(() => {
+        btn.textContent = baseText;
+        btn.classList.remove('bg-emerald-500', 'text-black');
+        btn.classList.add('bg-white', 'text-black');
+        document.getElementById('intercept-form').reset();
+      }, 2500);
+    }
+
+    // Close Dropdown window when clicking anywhere outside elements
+    window.addEventListener('click', function(e) {
+      if (!document.getElementById('lang-selector-wrapper').contains(e.target)) {
+        closeDropdown();
+      }
+    });
+
+    // On Load Initialization Lifecycle Hook
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+      const flags = { en: '🇬🇧', am: '🇪🇹', ar: '🇦🇪', fr: '🇫🇷' };
+      const labels = { en: 'English', am: 'አማርኛ', ar: 'العربية', fr: 'Français' };
+      changeLanguage(savedLang, flags[savedLang], labels[savedLang]);
+    });
+  </script>
 </body>
 </html>
